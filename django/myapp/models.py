@@ -10,6 +10,7 @@ class Musician(models.Model):
         blank =True
     )
 
+
 class Album(models.Model):
     artist = models.ForeignKey(Musician, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
@@ -18,6 +19,7 @@ class Album(models.Model):
         null=True,
     )
     num_start = models.IntegerField()
+
 
 class Person(models.Model):
     SHIRT_SIZES = (
@@ -32,7 +34,7 @@ class Person(models.Model):
     )
 
     def __str__(self):
-        return '{name} (PK: {pk}, 셔츠 사이즈: {shirt_size}'.format(
+        return '{name} (PK: {pk}, 셔츠 사이즈: {shirt_size})'.format(
             name=self.name,
             pk=self.pk,
             shirt_size=self.get_shirt_size_display()
