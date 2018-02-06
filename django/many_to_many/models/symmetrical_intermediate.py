@@ -1,5 +1,10 @@
 from django.db import models
 
+__all__ = (
+    'TwitterUser',
+    'Relation',
+)
+
 
 class TwitterUser(models.Model):
     """
@@ -19,6 +24,25 @@ class TwitterUser(models.Model):
         related_name='+',
     )
 
+    def __str__(self):
+        return self.name
+
+    def following(self):
+        """
+        TwitterUser list followed by self
+        :return:
+        """
+        # query set w/ from_user=self, type=following
+        following_relations = self.relations_by_from_user.filter(
+            type=Relation.RELATION_TYPE_FOLLOWING,
+        )
+        # pk list of the upper query set
+        following_pk_list = following_relations.values_list('to_user', flat=True)
+        # if TwitterUser's pk is in pk list(the upper),
+        # add to following_users var
+        following_users = TwitterUser.objects.filter(pk__in=following_pk_list)
+        return following_users
+
 
 class Relation(models.Model):
     """
@@ -35,9 +59,13 @@ class Relation(models.Model):
     from_user = models.ForeignKey(
         TwitterUser,
         on_delete=models.CASCADE,
+        # when self as from_user, to get relations
+        related_name='relations_by_from_user',
     )
     to_user = models.ForeignKey(
         TwitterUser,
         on_delete=models.CASCADE,
+        # when self as to_user, to get relations
+        related_name='relations_by_to_user',
     )
     type = models.CharField(max_length=1, choices=CHOICES_TYPE)
