@@ -25,7 +25,7 @@ class TwitterUser(models.Model):
     )
 
     def __str__(self):
-        return self.name
+        return f'{self.pk} | {self.name}'
 
     @property
     def following(self):
@@ -56,6 +56,33 @@ class TwitterUser(models.Model):
         block_pk_list = block_relations.values_list('to_user', flat=True)
         block_users = TwitterUser.objects.filter(pk__in=block_pk_list)
         return block_users
+
+    @property
+    def followers(self):
+        pk_list = self.relations_by_to_user.filter(
+            type=Relation.RELATION_TYPE_FOLLOWING
+        ).values_list('from_user', flat=True)
+        return TwitterUser.objects.filter(pk__in=pk_list)
+
+    def is_followee(self, to_user):
+        """
+        return boolean whether self is following to_user
+        :param to_user:
+        :return:
+        """
+        return self.following.filter(pk=to_user.pk).exists()
+
+    def is_follower(self, to_user):
+        """
+        return boolean whether self is followed by to_user
+        :param to_user:
+        :return:
+        """
+        # if self in to_user.following:
+        #     return True
+        # else:
+        #     return False
+        return self.followers.filter(pk=to_user.pk).exists()
 
     def follow(self, to_user):
         """
