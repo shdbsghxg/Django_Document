@@ -27,6 +27,7 @@ class TwitterUser(models.Model):
     def __str__(self):
         return self.name
 
+    @property
     def following(self):
         """
         TwitterUser list followed by self
@@ -42,6 +43,37 @@ class TwitterUser(models.Model):
         # add to following_users var
         following_users = TwitterUser.objects.filter(pk__in=following_pk_list)
         return following_users
+
+    @property
+    def block_users(self):
+        """
+        TwitterUsers self is blocking
+        :return:
+        """
+        block_relations = self.relations_by_from_user.filter(
+            type=Relation.RELATION_TYPE_BLOCK
+        )
+        block_pk_list = block_relations.values_list('to_user', flat=True)
+        block_users = TwitterUser.objects.filter(pk__in=block_pk_list)
+        return block_users
+
+    def follow(self, to_user):
+        """
+        follow to_user (TwitterUser )
+        :param to_user:
+        :return:
+        """
+        self.relations_by_from_user.create(
+            to_user=to_user,
+            type=Relation.RELATION_TYPE_FOLLOWING,
+        )
+
+    def block(self, to_user):
+        self.relations_by_from_user.filter(to_user=to_user).delete()
+        self.relations_by_from_user.create(
+            to_user=to_user,
+            type=Relation.RELATION_TYPE_BLOCK,
+        )
 
 
 class Relation(models.Model):
@@ -69,3 +101,13 @@ class Relation(models.Model):
         related_name='relations_by_to_user',
     )
     type = models.CharField(max_length=1, choices=CHOICES_TYPE)
+    created_date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = (
+            # w/ params 'from_user', 'to_user'
+            # block repeated saving w/ same params
+            # ex) from_user = u1, to_user = u3,
+            #       -> there could be only one relation b/w u1, u3
+            ('from_user', 'to_user')
+        )
