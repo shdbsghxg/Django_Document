@@ -12,6 +12,9 @@ class FacebookUser(models.Model):
     name = models.CharField(max_length=50)
     friends = models.ManyToManyField('self')
 
+    class Meta:
+        verbose_name_plural = 'Self - FacebookUsers'
+
     def __str__(self):
         # person1 [friends : friend1, friend2]
 

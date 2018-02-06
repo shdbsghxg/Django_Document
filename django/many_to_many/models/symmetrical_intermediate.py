@@ -24,6 +24,9 @@ class TwitterUser(models.Model):
         related_name='+',
     )
 
+    class Meta:
+        verbose_name_plural = 'IntermediateSymmetrical - TwitterUsers'
+
     def __str__(self):
         return f'{self.pk} | {self.name}'
 
@@ -131,6 +134,7 @@ class Relation(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
+        verbose_name_plural = 'IntermediateSymmetrical - Relations'
         unique_together = (
             # w/ params 'from_user', 'to_user'
             # block repeated saving w/ same params

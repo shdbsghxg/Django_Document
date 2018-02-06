@@ -21,12 +21,19 @@ class Post(models.Model):
         related_name='like_posts',
     )
 
+    class Meta:
+        verbose_name_plural = 'Intermediate - Posts'
+
+
     def __str__(self):
         return self.title
 
 
 class User(models.Model):
     name = models.CharField(max_length=50)
+
+    class Meta:
+        verbose_name_plural = 'Intermediate - Users'
 
     def __str__(self):
         return self.name
@@ -36,6 +43,9 @@ class PostLike(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_date = models.DateField(auto_now_add=True)
+
+    class Meta:
+        verbose_name_plural = 'Intermediate - PostLikes'
 
     def __str__(self):
         return '"{title}" 글의 좋아요 ({name}, {date})'.format(
