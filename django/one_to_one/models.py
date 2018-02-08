@@ -8,7 +8,7 @@ class Place(models.Model):
     address = models.CharField(max_length=80)
 
     def __str__(self):
-        return "%s the place" % self.name
+        return f'{self.name} the place'
 
 
 class Restaurant(models.Model):
@@ -21,7 +21,7 @@ class Restaurant(models.Model):
     serve_pizza = models.BooleanField(default=False)
 
     def __str__(self):
-        return "%s the restaurant" % self.place.name
+        return f'{self.place.name} the restaurant'
 
 
 class Waiter(models.Model):
@@ -29,4 +29,4 @@ class Waiter(models.Model):
     name = models.CharField(max_length=50)
 
     def __str__(self):
-        return "%s the waiter at %s" % (self.name, self.restaurant)
+        return f'{self.name} the waiter at {self.restaurant}'

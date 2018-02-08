@@ -40,9 +40,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'myapp',
     'foreignkey',
     'many_to_many',
+    'one_to_one',
+
+    'inheritance.abstract_base_classes',
 
 
 ]
