@@ -41,13 +41,22 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'myapp.apps.MyappConfig',
+    'django_extensions',
+
+    'myapp',
     'relations.foreignkey.apps.ForeignkeyConfig',
     'relations.many_to_many.apps.ManyToManyConfig',
     'relations.one_to_one.apps.OneToOneConfig',
 
-    'inheritance.abstract_base_classes',
+    'inheritance.abstract_base_classes.apps.AbstractBaseClassesConfig',
     'inheritance.rel.apps.RelConfig',
+    'inheritance.multi_table.apps.MultiTableConfig',
+    'inheritance.proxy.apps.ProxyConfig',
+    'inheritance.custom_manager.apps.CustomManagerConfig',
+    'inheritance.proxy_manager.apps.ProxyManagerConfig',
+    'inheritance.multiple_inheritance.apps.MultipleInheritanceConfig',
+
+
 
 
 
